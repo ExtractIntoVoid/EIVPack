@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="EIVPack.Test/EIVPack.Test.csproj" Id="fd9a62ac-d45a-4c77-9c37-cbe5db29c7cc" />
+  <Project Path="EIVPack/EIVPack.csproj" />
+</Solution>
