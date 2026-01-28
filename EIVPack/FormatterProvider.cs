@@ -4,29 +4,54 @@ using System.Text;
 
 namespace EIVPack;
 
-public static partial class FormatterProvider
+/// <summary>
+/// Provide access to cached <see cref="IFormatter{T}"/>.
+/// </summary>
+public static class FormatterProvider
 {
     static FormatterProvider()
     {
         RegisterFormatters();
     }
 
+    /// <summary>
+    /// Checks if the <typeparamref name="T"/> has been registered.
+    /// </summary>
+    /// <typeparam name="T">The type to check.</typeparam>
+    /// <returns><see langword="true"/> if the type is registered, otherwise <see langword="false"/>.</returns>
     public static bool IsRegistered<T>()
     {
         return Cache<T>.IsRegistered;
     }
 
+    /// <summary>
+    /// Registers a <paramref name="formatter"/> into type cache.
+    /// </summary>
+    /// <typeparam name="T">Type to register the formatter.</typeparam>
+    /// <param name="formatter">The created formatter.</param>
     public static void Register<T>(IFormatter<T> formatter)
     {
         Cache<T>.IsRegistered = true;
         Cache<T>.Formatter = formatter;
     }
 
+    /// <summary>
+    /// Registers a <typeparamref name="T"/> into type cache.
+    /// </summary>
+    /// <typeparam name="T">Type to register.</typeparam>
     public static void Register<T>() where T : IFormatterRegister
     {
         T.RegisterFormatter();
     }
 
+    /// <summary>
+    /// Gets the <see cref="IFormatter{T}"/> from the cache.
+    /// </summary>
+    /// <typeparam name="T">The type to get the formatter.</typeparam>
+    /// <returns>The cached <see cref="IFormatter{T}"/>.</returns>
+    /// <remarks>
+    /// If the <typeparamref name="T"/> type has not been registered or is a null formatter it will throw <see cref="PackException"/>.
+    /// </remarks>
     public static IFormatter<T> GetFormatter<T>()
     {
         if (!IsRegistered<T>())

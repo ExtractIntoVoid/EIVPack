@@ -5,7 +5,7 @@ namespace EIVPack;
 public static class Constants
 {
     public static ReadOnlySpan<byte> EmptyCollection => new byte[4];
-    public static readonly RecyclableMemoryStreamManager StreamManager = new()
+    internal static readonly RecyclableMemoryStreamManager StreamManager = new()
     {
         Settings =
         {

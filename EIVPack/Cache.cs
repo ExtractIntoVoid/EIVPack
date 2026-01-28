@@ -2,7 +2,7 @@
 
 namespace EIVPack;
 
-public static class Cache<T>
+internal static class Cache<T>
 {
     public static bool IsRegistered { get; internal set; }
 

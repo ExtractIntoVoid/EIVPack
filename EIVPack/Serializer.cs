@@ -1,5 +1,4 @@
-﻿
-namespace EIVPack;
+﻿namespace EIVPack;
 
 public static class Serializer
 {
@@ -18,6 +17,18 @@ public static class Serializer
         return bytes;
     }
 
+    public static T?[]? DeserializeArray<T>(in byte[] bytes)
+    {
+        if (bytes.Length == 0)
+            return null;
+
+        if (Constants.EmptyCollection.SequenceEqual(bytes))
+            return [];
+
+        PackReader reader = new(bytes);
+        return reader.ReadArray<T>();
+    }
+
     public static byte[] Serialize<T>(in T? value)
     {
         using PackWriter writer = new();
@@ -33,17 +44,5 @@ public static class Serializer
         PackReader reader = new(bytes);
         reader.ReadValue(ref value);
         return value;
-    }
-
-    public static T?[]? DeserializeArray<T>(in byte[] bytes)
-    {
-        if (bytes.Length == 0)
-            return null;
-
-        if (Constants.EmptyCollection.SequenceEqual(bytes))
-            return [];
-
-        PackReader reader = new(bytes);
-        return reader.ReadArray<T>();
     }
 }

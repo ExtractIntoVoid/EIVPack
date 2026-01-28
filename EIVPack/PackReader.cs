@@ -14,7 +14,7 @@ public ref struct PackReader
     public readonly long Length;
     public int Consumed { get; private set; } = 0;
     public readonly long Remaining => Length - Consumed;
-    
+
     public PackReader(in ReadOnlySequence<byte> sequence)
     {
         bufferSource = sequence;
@@ -42,7 +42,7 @@ public ref struct PackReader
         }
 
         currentBuffer = bufferSource.Slice(Consumed + count, Remaining - count).FirstSpan;
-        Consumed += count; 
+        Consumed += count;
     }
 
 
@@ -90,7 +90,7 @@ public ref struct PackReader
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly bool TryPeekHeader(out int length)
     {
-        return TryPeekUnmanaged(out length); 
+        return TryPeekUnmanaged(out length);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -128,7 +128,7 @@ public ref struct PackReader
     {
         if (!TryReadHeader(out int len))
         {
-            return null; 
+            return null;
         }
 
         if (len == 0)

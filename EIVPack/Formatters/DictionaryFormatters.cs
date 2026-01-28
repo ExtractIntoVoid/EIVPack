@@ -1,6 +1,6 @@
 ﻿namespace EIVPack.Formatters;
 
-public abstract class IDictionaryFormatter<TKey, TValue, TDictionary> : IFormatter<TDictionary> 
+public abstract class IDictionaryFormatter<TKey, TValue, TDictionary> : IFormatter<TDictionary>
     where TDictionary : IDictionary<TKey, TValue?>?, new()
     where TKey : notnull
 {

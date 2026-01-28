@@ -1,16 +1,38 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-	<IsAotCompatible>True</IsAotCompatible>
-	<IsTrimmable>True</IsTrimmable>
-	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
+		<PropertyGroup>	  
+		<TargetFramework>net10.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<Title>Serialization for EIV</Title>
+		<Authors>Extract Into Void</Authors>
+		<Company>Extract Into Void</Company>
+		<Description>Serialization Pack</Description>
+		<Copyright>Extract Into Void</Copyright>
+		<PackageProjectUrl>https://github.com/ExtractIntoVoid/EIVPack</PackageProjectUrl>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+		<Version>1.0</Version>
+		<FileVersion>1.0</FileVersion>
+		<LangVersion>latest</LangVersion>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="3.0.1" />
-  </ItemGroup>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	  
+		<EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+		<EnableSingleFileAnalyzer>true</EnableSingleFileAnalyzer>
+		<EnableAotAnalyzer>true</EnableAotAnalyzer>
+		<IsAotCompatible>true</IsAotCompatible>
 
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="3.0.1" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<None Include="..\LICENSE.txt" Pack="true" PackagePath="\" />
+		<None Include="..\README.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
 </Project>

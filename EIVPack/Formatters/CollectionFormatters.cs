@@ -124,7 +124,7 @@ public class HashSetFormatter<T>(IEqualityComparer<T?>? equalityComparer) : ICol
 }
 
 
-public class SortedSetFormatter<T>(IComparer<T?>? equalityComparer) : ICollectionTFormatter<T?,SortedSet<T?>>
+public class SortedSetFormatter<T>(IComparer<T?>? equalityComparer) : ICollectionTFormatter<T?, SortedSet<T?>>
 {
     readonly IComparer<T?>? equalityComparer = equalityComparer;
 
