@@ -22,5 +22,8 @@ internal static class PackGenerator
             context.ReportDiagnostic(Diagnostic.Create(DiagnosticDescriptors.MustBePartial, syntax.Identifier.GetLocation(), typeSymbol.Name));
             return;
         }
+
+
     }
+
 }

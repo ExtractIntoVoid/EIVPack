@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EIVPack\EIVPack.csproj" />
+    <ProjectReference Include="..\EIV_Pack\EIV_Pack.csproj" />
   </ItemGroup>
 
   <ItemGroup>
