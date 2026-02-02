@@ -13,7 +13,9 @@
 		<SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
 		<IsRoslynComponent>true</IsRoslynComponent>
 		<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
-
+		<PackageProjectUrl>https://github.com/ExtractIntoVoid/EIV_Pack</PackageProjectUrl>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 		<!-- NuGet -->
 		<IsPackable>true</IsPackable>
 		<PackageTags>serializer</PackageTags>
@@ -38,4 +40,9 @@
 		</ItemGroup>
 	</Target>
 
+	<ItemGroup>
+		<None Include="..\LICENSE.txt" Pack="true" PackagePath="\" />
+		<None Include="..\README.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
+	
 </Project>
