@@ -86,48 +86,48 @@ internal static class PackGenerator
 
         if (!typeSymbol.GetMembers().Any(x => x.IsStatic && x.Kind == SymbolKind.Method && x.Name == ".cctor"))
         {
-            sb.AppendLine("""
+            sb.AppendLine($$"""
 
-                    static __REPLACE__()
+                    static {{typeSymbol.Name}}()
                     {
-                        FormatterProvider.Register<__REPLACE__>();
+                        FormatterProvider.Register<{{typeSymbol.Name}}>();
                     }
 
-                """.Replace("__REPLACE__", typeSymbol.Name));
+                """);
         }
 
-        sb.AppendLine("""
+        sb.AppendLine($$"""
 
                 public static void RegisterFormatter()
                 {
-                    if (!FormatterProvider.IsRegistered<__REPLACE__>())
+                    if (!FormatterProvider.IsRegistered<{{typeSymbol.Name}}>())
                     {
-                        FormatterProvider.Register(new __REPLACE__());
+                        FormatterProvider.Register(new {{typeSymbol.Name}}());
                     }
 
-                    if (!FormatterProvider.IsRegistered<__REPLACE__[]>())
+                    if (!FormatterProvider.IsRegistered<{{typeSymbol.Name}}[]>())
                     {
-                        FormatterProvider.Register(new ArrayFormatter<__REPLACE__>());
+                        FormatterProvider.Register(new ArrayFormatter<{{typeSymbol.Name}}>());
                     }
                 }
 
-            """.Replace("__REPLACE__", typeSymbol.Name));
+            """);
 
         GeneratePackable(ref syntax, ref typeSymbol, ref sb, ref fieldOrParamList);
 
-        sb.AppendLine("""
+        sb.AppendLine($$"""
 
-                public void Deserialize(ref PackReader reader, scoped ref __REPLACE__ value)
+                public void Deserialize(ref PackReader reader, scoped ref {{typeSymbol.Name}}{{(typeSymbol.IsValueType ? string.Empty : "?")}} value)
                 {
                     DeserializePackable(ref reader, ref value);
                 }
 
-                public void Serialize(ref PackWriter writer, scoped ref readonly __REPLACE__ value)
+                public void Serialize(ref PackWriter writer, scoped ref readonly {{typeSymbol.Name}}{{(typeSymbol.IsValueType ? string.Empty : "?")}} value)
                 {
                     SerializePackable(ref writer, in value);
                 }
 
-            """.Replace("__REPLACE__", $"{typeSymbol.Name}{(typeSymbol.IsValueType ? "" : "?")}"));
+            """);
 
         sb.AppendLine("}");
         context.AddSource($"{fullType}.g.cs", sb.ToString());
