@@ -1,20 +1,19 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System;
 
 namespace EIV_Pack.Generator;
 
 [Generator(LanguageNames.CSharp)]
 public class MainGenerator : IIncrementalGenerator
 {
-    public const string AttributeFullName = "EIVPack.EIVPackableAttribute";
+    public const string AttributeFullName = "EIV_Pack.EIV_PackableAttribute";
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         var typeDeclarations = context.SyntaxProvider.ForAttributeWithMetadataName(
                AttributeFullName,
                predicate: static (node, token) =>
                {
-                   // search [EIVPackable] class or struct or record
+                   // search [EIV_Packable] class or struct or record
                    return node is ClassDeclarationSyntax
                                 or StructDeclarationSyntax
                                 or RecordDeclarationSyntax;
@@ -23,7 +22,7 @@ public class MainGenerator : IIncrementalGenerator
                {
                    return (TypeDeclarationSyntax)context.TargetNode;
                })
-               .WithTrackingName("EIVPack.EIVPackable.1_ForAttributeEIVPackableAttribute");
+               .WithTrackingName("EIV_Pack.EIV_Packable.1_ForAttributeEIV_PackableAttribute");
 
         context.RegisterSourceOutput(typeDeclarations.Combine(context.CompilationProvider), static (context, source) =>
         {

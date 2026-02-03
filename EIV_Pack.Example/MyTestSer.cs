@@ -1,8 +1,6 @@
-﻿using EIV_Pack;
+﻿namespace EIV_Pack.Example;
 
-namespace EIV_Pack.Example;
-
-[EIVPackable]
+[EIV_Packable]
 public partial class MyTestClass
 {
     public string? strrr;
@@ -13,49 +11,49 @@ public partial class MyTestClass
     public int Yeet { get; set; }
 }
 
-[EIVPackable]
+[EIV_Packable]
 public partial record class MyTestRecordClass
 {
     public int yeet;
     public int Yeet { get; set; }
 }
 
-[EIVPackable]
+[EIV_Packable]
 public partial record struct MyTestRecordStruct
 {
     public int yeet;
     public int Yeet { get; set; }
 }
 
-[EIVPackable]
+[EIV_Packable]
 public partial struct MyTestStruct
 {
     public int yeet;
     public int Yeet { get; set; }
 }
 
-[EIVPackable]
+[EIV_Packable]
 internal partial class MyTestClassInternal
 {
     public int yeet;
     public int Yeet { get; set; }
 }
 
-[EIVPackable]
+[EIV_Packable]
 internal partial record class MyTestRecordClassInternal
 {
     public int yeet;
     public int Yeet { get; set; }
 }
 
-[EIVPackable]
+[EIV_Packable]
 internal partial record struct MyTestRecordStructInternal
 {
     public int yeet;
     public int Yeet { get; set; }
 }
 
-[EIVPackable]
+[EIV_Packable]
 internal partial struct MyTestStructInternal
 {
     public int yeet;

@@ -51,8 +51,8 @@ internal static class PackGenerator
 
         StringBuilder sb = new();
         sb.AppendLine("// Generated with EIV_Pack.Generator.");
-        sb.AppendLine("using EIVPack;");
-        sb.AppendLine("using EIVPack.Formatters;");
+        sb.AppendLine("using EIV_Pack;");
+        sb.AppendLine("using EIV_Pack.Formatters;");
         sb.AppendLine("#nullable enable");
 
         List<string> names = [];
