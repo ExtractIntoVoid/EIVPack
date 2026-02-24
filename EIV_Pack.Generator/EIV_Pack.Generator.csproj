@@ -19,8 +19,8 @@
 		<!-- NuGet -->
 		<IsPackable>true</IsPackable>
 		<Description>Code generator for EIVPack.</Description>
-		<Version>2.1.2</Version>
-		<FileVersion>2.1.2</FileVersion>
+		<Version>2.2</Version>
+		<FileVersion>2.2</FileVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
