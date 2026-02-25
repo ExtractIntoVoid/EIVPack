@@ -26,7 +26,7 @@ public class ProviderTests
             Value = "sdfsf"
         };
 
-        FormatterProvider.Register<CustomType>();
+        CustomType.RegisterFormatter();
 
         var bytes = Serializer.Serialize(customType);
         Assert.NotEmpty(bytes);
