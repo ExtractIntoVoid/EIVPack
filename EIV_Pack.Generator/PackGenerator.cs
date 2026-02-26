@@ -1,6 +1,4 @@
 ﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Text;
 
 namespace EIV_Pack.Generator;
@@ -24,13 +22,11 @@ internal static class PackGenerator
            .Replace("<", "_")
            .Replace(">", "_");
 
-        var classOrStructOrRecord = (typeSymbol.IsRecord, typeSymbol.IsValueType) switch
-        {
-            (true, true) => "record struct",
-            (true, false) => "record",
-            (false, true) => "struct",
-            (false, false) => "class",
-        };
+        var TypeName = typeSymbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
+
+        var classOrStructOrRecord = HelperMethods.ValueName(typeSymbol);
+
+        string typeParameterStr = HelperMethods.GetTypeParameters(typeSymbol);
 
         StringBuilder sb = new();
         sb.AppendLine("// Generated with EIV_Pack.Generator.");
@@ -44,26 +40,7 @@ internal static class PackGenerator
             sb.AppendLine();
         }
 
-        List<string> names = [];
-        INamespaceSymbol namespaceSymbol = typeSymbol.ContainingNamespace;
-        while (namespaceSymbol != null)
-        {
-            if (namespaceSymbol.Name.Contains("<global namespace>"))
-                break;
-
-            names.Add(namespaceSymbol.Name);
-            namespaceSymbol = namespaceSymbol.ContainingNamespace;
-        }
-
-        names.Reverse();
-
-        string namespaceStr = string.Empty;
-
-        if (names.Count != 0)
-            namespaceStr = string.Join(".", names);
-
-        if (names.Count > 1)
-            namespaceStr = namespaceStr.Substring(1);
+        string namespaceStr = HelperMethods.GetNameSpace(typeSymbol);
 
         if (!string.IsNullOrEmpty(namespaceStr))
         {
@@ -79,7 +56,7 @@ internal static class PackGenerator
         }
 
         sb.AppendLine();
-        sb.AppendLine($"partial {classOrStructOrRecord} {typeSymbol.Name} : IPackable<{typeSymbol.Name}>");
+        sb.AppendLine($"partial {classOrStructOrRecord} {TypeName} : IPackable<{TypeName}>");
         sb.AppendLine("{");
 
         if (!typeSymbol.GetMembers().Any(x => x.IsStatic && x.Kind == SymbolKind.Method && x.Name == ".cctor"))
@@ -97,21 +74,21 @@ internal static class PackGenerator
 
         bool hasRegister = PreProcessing.HasRegisterFormatter(typeSymbol);
 
-        string formatterName = generatorClass.IsNet8OrGreater ? $"EIV_Formatter<{typeSymbol.Name}>" : $"{typeSymbol.Name}_Formatter";
+        string formatterName = generatorClass.IsNet8OrGreater ? $"EIV_Formatter<{TypeName}>" : $"{typeSymbol.Name}_Formatter{typeParameterStr}";
 
         sb.AppendLine(
             $$"""
 
                 public static{{(hasRegister ? " new " : " ")}}void RegisterFormatter()
                 {
-                    if (!FormatterProvider.IsRegistered<{{typeSymbol.Name}}>())
+                    if (!FormatterProvider.IsRegistered<{{TypeName}}>())
                     {
-                        FormatterProvider.Register<{{typeSymbol.Name}}>(new {{formatterName}}());
+                        FormatterProvider.Register<{{TypeName}}>(new {{formatterName}}());
                     }
 
-                    if (!FormatterProvider.IsRegistered<{{typeSymbol.Name}}[]>())
+                    if (!FormatterProvider.IsRegistered<{{TypeName}}[]>())
                     {
-                        FormatterProvider.Register(new ArrayFormatter<{{typeSymbol.Name}}>());
+                        FormatterProvider.Register(new ArrayFormatter<{{TypeName}}>());
                     }
                 }
             
@@ -147,16 +124,16 @@ internal static class PackGenerator
         }
 
         sb.AppendLine($$"""
-                sealed class {{typeSymbol.Name}}_Formatter : BaseFormatter<{{typeSymbol.Name}}>
+                sealed class {{typeSymbol.Name}}_Formatter{{typeParameterStr}} : BaseFormatter<{{TypeName}}>{{ string.Join("\n, ", HelperMethods.GetWhereClauses(typeSymbol))}}
                 {
-                    public override void Serialize(ref PackWriter writer, scoped ref readonly {{typeSymbol.Name}} value)
+                    public override void Serialize(ref PackWriter writer, scoped ref readonly {{TypeName}} value)
                     {
-                        {{typeSymbol.Name}}.SerializePackable(ref writer, in value);
+                        {{TypeName}}.SerializePackable(ref writer, in value);
                     }
 
-                    public override void Deserialize(ref PackReader reader, scoped ref {{typeSymbol.Name}} value)
+                    public override void Deserialize(ref PackReader reader, scoped ref {{TypeName}} value)
                     {
-                        {{typeSymbol.Name}}.DeserializePackable(ref reader, ref value);
+                        {{TypeName}}.DeserializePackable(ref reader, ref value);
                     }
                 }
             """);
@@ -173,6 +150,7 @@ internal static class PackGenerator
 
     internal static void GeneratePackable(ref INamedTypeSymbol typeSymbol, ref StringBuilder sb, ref List<ISymbol> FieldAndParamList, ref List<ISymbol> initOnly, bool isNet8OrGreater)
     {
+        var TypeName = typeSymbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
         var nullable = !typeSymbol.IsValueType && isNet8OrGreater ? "?" : string.Empty;
         var exceptInit = FieldAndParamList.Except(initOnly);
         bool hasInitOnly = initOnly.Count > 0;
@@ -180,7 +158,7 @@ internal static class PackGenerator
 
         sb.AppendLine($"\tconst int EIV_PACK_FieldAndParamCount = {FieldAndParamList.Count};");
         sb.AppendLine();
-        sb.AppendLine($"\tpublic static void DeserializePackable(ref PackReader reader, scoped ref {typeSymbol.Name}{nullable} value)");
+        sb.AppendLine($"\tpublic static void DeserializePackable(ref PackReader reader, scoped ref {TypeName}{nullable} value)");
         sb.AppendLine("\t{");
         if (FieldAndParamList.Count <= 255)
             sb.AppendLine($"\t\tif (!reader.TryReadSmallHeader(out byte header) || header != EIV_PACK_FieldAndParamCount)");
@@ -219,7 +197,7 @@ internal static class PackGenerator
 
         sb.AppendLine("\t}");
         sb.AppendLine();
-        sb.AppendLine($"\tpublic static void SerializePackable(ref PackWriter writer, scoped ref readonly {typeSymbol.Name}{nullable} value)");
+        sb.AppendLine($"\tpublic static void SerializePackable(ref PackWriter writer, scoped ref readonly {TypeName}{nullable} value)");
         sb.AppendLine("\t{");
 
         string useSmall = FieldAndParamList.Count <= 255 ? "Small" : string.Empty;
