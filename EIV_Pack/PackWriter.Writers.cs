@@ -10,7 +10,7 @@ public ref partial struct PackWriter : IDisposable
     {
         int size = sizeof(T);
         Span<byte> span = recyclable.GetSpan(size);
-#if NET8_0_OR_GREATER
+#if !NETSTANDARD2_0
         MemoryMarshal.Write(span, value);
 #else
         T val = value;

@@ -2,7 +2,7 @@
 
 public interface IFormatterRegister
 {
-#if NET8_0_OR_GREATER
+#if !NETSTANDARD2_0
     static abstract void RegisterFormatter();
 #endif
 }
@@ -23,7 +23,7 @@ public interface IFormatter<T> : IFormatter
 
 public interface IPackable<T> : IFormatterRegister
 {
-#if NET8_0_OR_GREATER
+#if !NETSTANDARD2_0
     static abstract void SerializePackable(ref PackWriter writer, scoped ref readonly T? value);
 
     static abstract void DeserializePackable(ref PackReader reader, scoped ref T? value);

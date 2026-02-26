@@ -1,4 +1,4 @@
-﻿#if NET8_0_OR_GREATER
+﻿#if !NETSTANDARD2_0
 using System.Diagnostics.CodeAnalysis;
 #endif
 
@@ -6,7 +6,7 @@ namespace EIV_Pack;
 
 public class PackException(string message) : Exception(message)
 {
-#if NET8_0_OR_GREATER
+#if !NETSTANDARD2_0
     [DoesNotReturn]
 #endif
     public static void ThrowMessage(string message)
@@ -14,7 +14,7 @@ public class PackException(string message) : Exception(message)
         throw new PackException(message);
     }
 
-#if NET8_0_OR_GREATER
+#if !NETSTANDARD2_0
     [DoesNotReturn]
 #endif
     public static void ThrowNotRegisteredInProvider(Type type)
@@ -22,7 +22,7 @@ public class PackException(string message) : Exception(message)
         throw new PackException($"{type.FullName} is not registered in this provider.");
     }
 
-#if NET8_0_OR_GREATER
+#if !NETSTANDARD2_0
     [DoesNotReturn]
 #endif
     public static void ThrowReachedDepthLimit(Type type)
@@ -30,7 +30,7 @@ public class PackException(string message) : Exception(message)
         throw new PackException($"Serializing Type '{type}' reached depth limit, maybe detect circular reference.");
     }
 
-#if NET8_0_OR_GREATER
+#if !NETSTANDARD2_0
     [DoesNotReturn]
 #endif
     public static void ThrowHeaderNotSame(Type type, int expected, int actual)

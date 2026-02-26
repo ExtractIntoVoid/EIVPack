@@ -18,7 +18,7 @@ public ref partial struct PackWriter : IDisposable
     public readonly byte[] GetBytes()
     {
         int len = (int)recyclable.Length;
-#if NET8_0_OR_GREATER
+#if !NETSTANDARD2_0
         return recyclable.GetBuffer()[..len];
 #else
         return [.. recyclable.GetBuffer().Take(len)];

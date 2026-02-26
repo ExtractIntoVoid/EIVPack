@@ -1,11 +1,11 @@
-﻿#if NET8_0_OR_GREATER
+﻿#if !NETSTANDARD2_0
 using System.Diagnostics.CodeAnalysis;
 #endif
 
 namespace EIV_Pack.Formatters;
 
 public sealed class LazyFormatter<
-#if NET8_0_OR_GREATER
+#if !NETSTANDARD2_0
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)]
 #endif
     T> : BaseFormatter<Lazy<T?>>

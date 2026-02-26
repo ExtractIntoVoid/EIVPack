@@ -46,7 +46,7 @@ public abstract class IDictionaryFormatter<TKey, TValue, TDictionary> : BaseForm
         foreach (var item in dictionary)
         {
 
-#if NET8_0_OR_GREATER
+#if !NETSTANDARD2_0
             item.Deconstruct(out var key, out var value);
 #else
             var key = item.Key;

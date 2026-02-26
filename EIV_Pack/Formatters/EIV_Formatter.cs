@@ -1,4 +1,4 @@
-﻿#if NET8_0_OR_GREATER
+﻿#if !NETSTANDARD2_0
 namespace EIV_Pack.Formatters;
 
 public sealed class EIV_Formatter<T> : BaseFormatter<T> where T : IPackable<T>

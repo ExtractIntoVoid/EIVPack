@@ -13,7 +13,7 @@ public ref partial struct PackWriter : IDisposable
         if (depth == DepthLimit)
             PackException.ThrowReachedDepthLimit(typeof(T));
 
-#if NET8_0_OR_GREATER
+#if !NETSTANDARD2_0
         T.SerializePackable(ref this, ref Unsafe.AsRef(in value));
 #else
         IFormatter<T> formatter = FormatterProvider.GetFormatter<T>();

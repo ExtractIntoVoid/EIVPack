@@ -26,7 +26,7 @@ public static class Serializer
 
         if (value.Length == 0)
         {
-#if NET8_0_OR_GREATER
+#if !NETSTANDARD2_0
             return Constants.EmptyCollection.ToArray();
 #else
             return new ArraySegment<byte>(Constants.EmptyCollection.ToArray());

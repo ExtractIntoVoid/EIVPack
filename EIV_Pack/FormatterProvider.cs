@@ -1,7 +1,7 @@
 ﻿using EIV_Pack.Formatters;
 using System.Collections.Concurrent;
 using System.Numerics;
-#if NET8_0_OR_GREATER
+#if !NETSTANDARD2_0
 using System.Text;
 #endif
 
@@ -41,7 +41,7 @@ public static class FormatterProvider
         formatters[typeof(T)] = formatter;
     }
 
-#if NET8_0_OR_GREATER
+#if !NETSTANDARD2_0
     /// <summary>
     /// Registers a <typeparamref name="T"/> into type cache.
     /// </summary>
@@ -92,7 +92,7 @@ public static class FormatterProvider
         RegisterToAll<UInt32>();
         RegisterToAll<Int64>();
         RegisterToAll<UInt64>();
-#if NET8_0_OR_GREATER
+#if !NETSTANDARD2_0
         RegisterToAll<UInt128>();
         RegisterToAll<Int128>();
 #endif
@@ -103,14 +103,14 @@ public static class FormatterProvider
         RegisterToAll<Boolean>();
         RegisterToAll<IntPtr>();
         RegisterToAll<UIntPtr>();
-#if NET8_0_OR_GREATER
+#if !NETSTANDARD2_0
         RegisterToAll<Rune>();
 #endif
         RegisterToAll<DateTime>();
         RegisterToAll<DateTimeOffset>();
         RegisterToAll<TimeSpan>();
         RegisterToAll<Guid>();
-#if NET8_0_OR_GREATER
+#if !NETSTANDARD2_0
         RegisterToAll<DateOnly>();
         RegisterToAll<TimeOnly>();
 #endif

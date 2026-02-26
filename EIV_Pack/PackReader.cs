@@ -65,7 +65,7 @@ public ref struct PackReader
             throw new InvalidOperationException("Remaining bytes cannot read this type!");
         }
 
-#if NET8_0_OR_GREATER
+#if !NETSTANDARD2_0
         T value = MemoryMarshal.Read<T>(currentBuffer[..size]);
 #else
         T value = MemoryMarshal.Read<T>(currentBuffer.Slice(0, size));
@@ -98,7 +98,7 @@ public ref struct PackReader
         }
 
         ReadOnlySpan<byte> buffer = currentBuffer
-#if NET8_0_OR_GREATER
+#if !NETSTANDARD2_0
         [..size];
 #else
         .Slice(0, size);
@@ -155,7 +155,7 @@ public ref struct PackReader
         if (len == 0)
             return string.Empty;
 
-#if NET8_0_OR_GREATER
+#if !NETSTANDARD2_0
         string str = TextEncoding.GetString(currentBuffer[..len]);
 #else
         string str = TextEncoding.GetString(currentBuffer.Slice(0, len).ToArray());
@@ -169,7 +169,7 @@ public ref struct PackReader
     public void ReadPackable<T>(scoped ref T? value)
         where T : IPackable<T>
     {
-#if NET8_0_OR_GREATER
+#if !NETSTANDARD2_0
         T.DeserializePackable(ref this, ref value);
 #else
         ReadValue(ref value);
@@ -182,7 +182,7 @@ public ref struct PackReader
         where T : IPackable<T>
     {
         T? value = default;
-#if NET8_0_OR_GREATER
+#if !NETSTANDARD2_0
         T.DeserializePackable(ref this, ref value);
 #else
         ReadValue(ref value);
