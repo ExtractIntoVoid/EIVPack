@@ -17,4 +17,7 @@ public static class Constants
 
     public const int NullHeader = -1;
     public const byte SmallNullHeader = 0;
+
+    public static bool IsRegisterDefaultFormatters { get; } =
+        !AppContext.TryGetSwitch("EIV_Pack.FormatterProvider.IsRegisterDefaultFormatters", out var isEnabled) || isEnabled;
 }

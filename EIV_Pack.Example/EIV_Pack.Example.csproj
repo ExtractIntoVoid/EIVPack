@@ -31,5 +31,8 @@
 	<ItemGroup>
 		<None Include="Generated/**" />
 	</ItemGroup>
+	<RuntimeHostConfigurationOption
+	Include="EIV_Pack.FormatterProvider.IsRegisterDefaultFormatters"
+	Value="false" />
 	-->
 </Project>

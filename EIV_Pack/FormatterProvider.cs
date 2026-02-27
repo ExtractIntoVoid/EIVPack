@@ -1,9 +1,6 @@
 ﻿using EIV_Pack.Formatters;
 using System.Collections.Concurrent;
 using System.Numerics;
-#if !NETSTANDARD2_0
-using System.Text;
-#endif
 
 namespace EIV_Pack;
 
@@ -16,7 +13,8 @@ public static class FormatterProvider
 
     static FormatterProvider()
     {
-        RegisterFormatters();
+        if (Constants.IsRegisterDefaultFormatters)
+            RegisterFormatters();
     }
 
     /// <summary>
@@ -85,7 +83,7 @@ public static class FormatterProvider
     private static void RegisterFormatters()
     {
         Register(new StringFormatter());
-        RegisterClass<string>();
+        RegisterCollection<string>();
         RegisterToAll<SByte>();
         RegisterToAll<Byte>();
         RegisterToAll<Int16>();
@@ -106,7 +104,7 @@ public static class FormatterProvider
         RegisterToAll<IntPtr>();
         RegisterToAll<UIntPtr>();
 #if !NETSTANDARD2_0
-        RegisterToAll<Rune>();
+        RegisterToAll<System.Text.Rune>();
 #endif
         RegisterToAll<DateTime>();
         RegisterToAll<DateTimeOffset>();
@@ -130,10 +128,7 @@ public static class FormatterProvider
     {
         Register(new UnmanagedFormatter<T>());
         Register(new NullableFormatter<T>());
-        Register(new ArrayFormatter<T>());
-        Register(new ArraySegmentFormatter<T>());
-        Register(new MemoryFormatter<T>());
-        Register(new ReadOnlyMemoryFormatter<T>());
+        RegisterCollection<T>();
     }
 
     /// <summary>
@@ -144,9 +139,12 @@ public static class FormatterProvider
     /// It will register as:
     /// Array, Collection, ObservableCollection, List, LinkedList, HashSet, SortedSet, Queue, Stack.
     /// </remarks>
-    public static void RegisterClass<T>() where T: class
+    public static void RegisterCollection<T>()
     {
         Register(new ArrayFormatter<T>());
+        Register(new ArraySegmentFormatter<T>());
+        Register(new MemoryFormatter<T>());
+        Register(new ReadOnlyMemoryFormatter<T>());
         Register(new CollectionFormatter<T>());
         Register(new ObservableCollectionFormatter<T>());
         Register(new ListFormatter<T>());
