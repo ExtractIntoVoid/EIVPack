@@ -59,6 +59,7 @@ public class PackWriterTests
         writer1.WriteArray([666, 666, 666, 666, 6666666]);
         writer1.WriteArray([666]);
         writer1.WriteArray([666]);
+        writer1.WriteArrayUnmanaged<int>([666]);
         PackReader reader2 = new(writer1.GetReadOnlySequence());
         int[]? ints = new int[4];
         int[] ? intsNull = null;

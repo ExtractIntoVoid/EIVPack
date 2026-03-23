@@ -1,15 +1,15 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Text;
 
 namespace EIV_Pack.Generator;
 
 internal static class PreProcessing
 {
 
-    public static bool EarlyReturn(GeneratorClass generatorClass, SourceProductionContext context, out INamedTypeSymbol? typeSymbol)
+    public static bool EarlyReturn(GeneratorClass generatorClass, SourceProductionContext context, out INamedTypeSymbol? typeSymbol, out int GenerateType)
     {
+        GenerateType = 0;
         TypeDeclarationSyntax syntax = generatorClass.Syntax;
         var semanticModel = generatorClass.Compilation.GetSemanticModel(syntax.SyntaxTree);
 
@@ -20,6 +20,24 @@ internal static class PreProcessing
         // return on private
         if (typeSymbol.DeclaredAccessibility == Accessibility.Private)
             return false;
+
+        var packableAttribute = typeSymbol.GetAttributes().FirstOrDefault(attrib => attrib.AttributeClass?.Name == "EIV_PackableAttribute");
+        if (packableAttribute == null)
+            return true;
+
+
+
+        // Dont have ctor args.
+        if (packableAttribute.ConstructorArguments.Length != 0)
+        {
+            int? GenerateTypeNullable = packableAttribute.ConstructorArguments[0].Value as int?;
+
+            // 2 is NoGenerate
+            if (GenerateTypeNullable == 2)
+                return false;
+
+            GenerateType = GenerateTypeNullable ?? 0;
+        }
 
         // verify is partial
         if (!syntax.Modifiers.Any(static m => m.IsKind(SyntaxKind.PartialKeyword)))
@@ -42,7 +60,34 @@ internal static class PreProcessing
             return [];
         }
 
+        symbols = symbols.OrderBy(GetOrder).ToList();
+
         return symbols;
+    }
+
+    public static int GetOrder(ISymbol symbol)
+    {
+        var PackOrder = symbol.GetAttributes().FirstOrDefault(attrib => attrib.AttributeClass?.Name == "EIV_PackOrderAttribute");
+        if (PackOrder == null)
+            return int.MaxValue;
+
+        var ctorArg = PackOrder.ConstructorArguments[0];
+        int? order = ctorArg.Value as int?;
+        if (!order.HasValue)
+            return int.MaxValue;
+
+        return order.Value;
+    }
+
+    public static bool HasOrder(ISymbol symbol)
+    {
+        var PackOrder = symbol.GetAttributes().FirstOrDefault(attrib => attrib.AttributeClass?.Name == "EIV_PackOrderAttribute");
+        if (PackOrder == null)
+            return false;
+
+        var ctorArg = PackOrder.ConstructorArguments[0];
+        int? order = ctorArg.Value as int?;
+        return order.HasValue;
     }
 
     static List<ISymbol> GetFieldOrParams(INamedTypeSymbol symbol)

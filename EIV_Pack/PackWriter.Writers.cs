@@ -74,6 +74,21 @@ public ref partial struct PackWriter : IDisposable
         }
     }
 
+    public readonly void WriteArrayUnmanaged<T>(T?[]? array) where T : unmanaged
+    {
+        if (array == null)
+        {
+            WriteHeader();
+            return;
+        }
+
+        WriteHeader(array.Length);
+        for (int i = 0; i < array.Length; i++)
+        {
+            WriteUnmanagedNullable(in array[i]);
+        }
+    }
+
     public void WriteSpan<T>(scoped Span<T?> value, bool useHeader = true)
     {
         IFormatter<T> formatter = FormatterProvider.GetFormatter<T>();
@@ -87,6 +102,18 @@ public ref partial struct PackWriter : IDisposable
         }
     }
 
+
+    public readonly void WriteSpanUnmanaged<T>(scoped Span<T?> value, bool useHeader = true) where T : unmanaged
+    {
+        if (useHeader)
+            WriteHeader(value.Length);
+
+        for (int i = 0; i < value.Length; i++)
+        {
+            WriteUnmanagedNullable(in value[i]);
+        }
+    }
+
     public void WriteSpan<T>(scoped ReadOnlySpan<T?> value, bool useHeader = true)
     {
         IFormatter<T> formatter = FormatterProvider.GetFormatter<T>();
@@ -97,6 +124,17 @@ public ref partial struct PackWriter : IDisposable
         for (int i = 0; i < value.Length; i++)
         {
             formatter.Serialize(ref this, ref Unsafe.AsRef(in value[i]));
+        }
+    }
+
+    public readonly void WriteSpanUnmanaged<T>(scoped ReadOnlySpan<T?> value, bool useHeader = true) where T : unmanaged
+    {
+        if (useHeader)
+            WriteHeader(value.Length);
+
+        for (int i = 0; i < value.Length; i++)
+        {
+            WriteUnmanagedNullable(in value[i]);
         }
     }
 }

@@ -44,7 +44,6 @@ public ref partial struct PackWriter : IDisposable
         depth--;
     }
 
-
     public void WriteValueWithFormatter(IFormatter formatter, scoped in object? value)
     {
         depth++;

@@ -127,8 +127,19 @@ public static class FormatterProvider
     private static void RegisterToAll<T>() where T : unmanaged
     {
         Register(new UnmanagedFormatter<T>());
-        Register(new NullableFormatter<T>());
-        RegisterCollection<T>();
+        Register(new NullableUnmanagedFormatter<T>());
+        Register(new ArrayUnmanagedFormatter<T>());
+        Register(new ArraySegmentUnmanagedFormatter<T>());
+        Register(new MemoryUnmanagedFormatter<T>());
+        Register(new ReadOnlyMemoryUnmanagedFormatter<T>());
+        Register(new CollectionFormatter<T>());
+        Register(new ObservableCollectionFormatter<T>());
+        Register(new ListFormatter<T>());
+        Register(new LinkedListFormatter<T>());
+        Register(new HashSetFormatter<T>());
+        Register(new SortedSetFormatter<T>());
+        Register(new QueueFormatter<T>());
+        Register(new StackFormatter<T>());
     }
 
     /// <summary>

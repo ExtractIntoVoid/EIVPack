@@ -1,6 +1,4 @@
 ﻿using EIV_Pack.Formatters;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace EIV_Pack.Test;
@@ -15,7 +13,7 @@ public class CollectionFormattersTests
         Assert.NotNull(formatter);
         Collection<int>? ints = [555, 555, 556, 457476];
         Collection<int>? valNull = null;
-        Collection<int>? col = new();
+        Collection<int>? col = [];
         writer.WriteValueWithFormatter(formatter, ints);
         writer.WriteValueWithFormatter(formatter, valNull);
         writer.WriteValueWithFormatter(formatter, ints);
@@ -38,7 +36,7 @@ public class CollectionFormattersTests
         Assert.NotNull(formatter);
         ObservableCollection<int>? ints = [555, 555, 556, 457476];
         ObservableCollection<int>? valNull = null;
-        ObservableCollection<int>? col = new();
+        ObservableCollection<int>? col = [];
         writer.WriteValueWithFormatter(formatter, ints);
         writer.WriteValueWithFormatter(formatter, valNull);
         writer.WriteValueWithFormatter(formatter, ints);
@@ -60,7 +58,7 @@ public class CollectionFormattersTests
         Assert.NotNull(formatter);
         List<int>? ints = [555, 555, 556, 457476];
         List<int>? valNull = null;
-        List<int>? col = new();
+        List<int>? col = [];
         writer.WriteValueWithFormatter(formatter, ints);
         writer.WriteValueWithFormatter(formatter, valNull);
         writer.WriteValueWithFormatter(formatter, ints);
@@ -105,7 +103,7 @@ public class CollectionFormattersTests
         Assert.NotNull(formatter);
         HashSet<int>? ints = new([555, 555, 556, 457476]);
         HashSet<int>? valNull = null;
-        HashSet<int>? col = new();
+        HashSet<int>? col = [];
         writer.WriteValueWithFormatter(formatter, ints);
         writer.WriteValueWithFormatter(formatter, valNull);
         writer.WriteValueWithFormatter(formatter, ints);
@@ -127,7 +125,7 @@ public class CollectionFormattersTests
         Assert.NotNull(formatter);
         SortedSet<int>? ints = new([555, 555, 556, 457476]);
         SortedSet<int>? valNull = null;
-        SortedSet<int>? col = new();
+        SortedSet<int>? col = [];
         writer.WriteValueWithFormatter(formatter, ints);
         writer.WriteValueWithFormatter(formatter, valNull);
         writer.WriteValueWithFormatter(formatter, ints);

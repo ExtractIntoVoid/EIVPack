@@ -59,4 +59,13 @@ public partial class InitTest : IInitTest
     public int Test { get; set; }
     public required bool boooll;
 }
+
+[EIV_Packable]
+public partial struct InitTestStruct : IInitTest
+{
+    public required int Test2 { get; init; }
+
+    public int Test { get; set; }
+    public required bool boooll;
+}
 #endif

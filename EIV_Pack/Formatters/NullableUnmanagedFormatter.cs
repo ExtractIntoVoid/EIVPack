@@ -1,6 +1,6 @@
 ﻿namespace EIV_Pack.Formatters;
 
-public sealed class NullableFormatter<T> : BaseFormatter<T?> where T : unmanaged
+public sealed class NullableUnmanagedFormatter<T> : BaseFormatter<T?> where T : unmanaged
 {
     public override void Deserialize(ref PackReader reader, scoped ref T? value)
     {
